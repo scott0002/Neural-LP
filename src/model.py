@@ -204,7 +204,7 @@ class Learner(object):
         self.optimizer = tf.train.AdamOptimizer(self.learning_rate)
         gvs = self.optimizer.compute_gradients(tf.reduce_mean(self.final_loss))
         capped_gvs = map(
-            lambda (grad, var): self._clip_if_not_None(grad, var, -5., 5.), gvs) 
+            lambda grad, var: self._clip_if_not_None(grad, var, -5., 5.), gvs) 
         self.optimizer_step = self.optimizer.apply_gradients(capped_gvs)
 
     def _run_graph(self, sess, qq, hh, tt, mdb, to_fetch):
