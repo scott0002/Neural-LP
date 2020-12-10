@@ -45,7 +45,7 @@ class Learner(object):
         """ Initialize random and unit row norm matrix of size (r, c). """
         bound = 6./ np.sqrt(c)
         init_matrix = np.random.uniform(-bound, bound, (r, c))
-        init_matrix = np.array(map(lambda row: row / np.linalg.norm(row), init_matrix))
+        init_matrix = np.array(list(map(lambda row: row / np.linalg.norm(row), init_matrix)))
         return init_matrix
 
     def _clip_if_not_None(self, g, v, low, high):
@@ -203,8 +203,8 @@ class Learner(object):
         
         self.optimizer = tf.train.AdamOptimizer(self.learning_rate)
         gvs = self.optimizer.compute_gradients(tf.reduce_mean(self.final_loss))
-        capped_gvs = map(
-            lambda grad, var: self._clip_if_not_None(grad, var, -5., 5.), gvs) 
+        capped_gvs = list(map(
+            lambda grad, var: self._clip_if_not_None(grad, var, -5., 5.), gvs))
         self.optimizer_step = self.optimizer.apply_gradients(capped_gvs)
 
     def _run_graph(self, sess, qq, hh, tt, mdb, to_fetch):
